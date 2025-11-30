@@ -1,5 +1,5 @@
 import { AnimatedGroup } from '@/components/ui/animated-group';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { TextEffect } from '@/components/ui/text-effect';
 import ArcjetLogo from '@/public/companies/arcjet.png';
 import KindeLogo from '@/public/companies/kinde.png';
@@ -12,6 +12,7 @@ import VercelLogo from '@/public/companies/vercel.svg';
 import BackgroundImage from '@/public/night-background.webp';
 import HeroDark from '@/public/screenshot-dark.png';
 import HeroLight from '@/public/screenshot-light.png';
+import { RegisterLink } from '@kinde-oss/kinde-auth-nextjs';
 import { ArrowRight, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -152,20 +153,13 @@ export default function HeroSection() {
 									}}
 									className="mt-12 flex flex-col items-center justify-center gap-5 md:flex-row"
 								>
-									<div
-										key={1}
-										className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5"
+									<RegisterLink
+										className={buttonVariants({
+											size: 'default',
+										})}
 									>
-										<Button
-											asChild
-											size="lg"
-											className="rounded-xl px-5 text-base"
-										>
-											<Link href="#link">
-												<span className="text-nowrap">Get Started</span>
-											</Link>
-										</Button>
-									</div>
+										Get Started
+									</RegisterLink>
 									<Button
 										key={2}
 										asChild
