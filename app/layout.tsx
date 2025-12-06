@@ -1,4 +1,7 @@
 import { AuthProvider } from '@/components/ui/auth-provider';
+import { Toaster } from '@/components/ui/sonner';
+import '@/lib/orpc.server';
+import { Providers } from '@/lib/providers';
 import { ThemeProvider } from '@/lib/theme-provider';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
@@ -36,7 +39,8 @@ export default function RootLayout({
 						enableSystem
 						disableTransitionOnChange
 					>
-						{children}
+						<Providers>{children}</Providers>
+						<Toaster closeButton position="top-center" />
 					</ThemeProvider>
 				</body>
 			</html>

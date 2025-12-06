@@ -24,13 +24,17 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { orpc } from '@/lib/orpc';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export const CreateWorkspace = () => {
 	const [open, setOpen] = useState(false);
+	const queryClient = useQueryClient();
 
 	const form = useForm({
 		resolver: zodResolver(workspaceSchema),
@@ -39,8 +43,27 @@ export const CreateWorkspace = () => {
 		},
 	});
 
+	const createWorkspaceMutation = useMutation(
+		orpc.workspace.create.mutationOptions({
+			onSuccess: (newWorkspace) => {
+				toast.success(
+					`Workspace ${newWorkspace.workspaceName} created successfully`
+				);
+				queryClient.invalidateQueries({
+					queryKey: orpc.workspace.list.queryKey(),
+				});
+
+				form.reset();
+				setOpen(false);
+			},
+			onError: () => {
+				toast.error('Failed to create workspace, try again!');
+			},
+		})
+	);
+
 	const onSubmit = (data: Workspace) => {
-		console.log('data', data);
+		createWorkspaceMutation.mutate(data);
 	};
 
 	return (
@@ -88,7 +111,14 @@ export const CreateWorkspace = () => {
 						/>
 
 						<div className="flex justify-end">
-							<Button type="submit">Create Workspace</Button>
+							<Button
+								disabled={createWorkspaceMutation.isPending}
+								type="submit"
+							>
+								{createWorkspaceMutation.isPending
+									? 'Creating...'
+									: 'Create Workspace'}
+							</Button>
 						</div>
 					</form>
 				</Form>
